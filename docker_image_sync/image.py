@@ -73,14 +73,19 @@ class Image:
 
     def push(self) -> List[dict]:
         if self._isDemo():
-            return [
-                {"status": "connect"},
-                {"status": "upload"},
-                {"status": "success"},
-            ]
+            info = '\r\n'.join(
+                [
+                    f'{{"status": "The push refers to repository [{self.dest_name}]"}}',
+                    '{"id": "999999999999", "progressDetail": {}, "status": "Preparing"}',
+                    '{"id": "999999999999", "progressDetail": {}, "status": "Waiting"}',
+                    '{"id": "999999999999", "progressDetail": {}, "status": "Layer already exists"}',
+                    '{"status": "latest: digest: sha256:abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz01 size: 999"}',
+                    '{"aux": {"Digest": "sha256:abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz01", "Size": 999, "Tag": "latest"}, "progressDetail": {}}',
+                ]
+            )
         else:
             info = self._client.images.push(self.dest_repo, tag=self.tag)
-            return json.loads('[' + re.sub(r'}\s*{', '},{', info) + ']')
+        return json.loads('[' + re.sub(r'}\s*{', '},{', info) + ']')
 
     def _isDemo(self) -> bool:
         if self.demo:
