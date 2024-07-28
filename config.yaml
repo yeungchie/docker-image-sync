@@ -1,0 +1,7 @@
+images:
+  - alpine:latest
+  - python:latest
+  - gitlab/gitlab-ce:latest
+  - homeassistant/home-assistant:latest
+registry: my.registry.com
+namespace: mynamespace
