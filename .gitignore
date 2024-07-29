@@ -1,3 +1,7 @@
 .vscode
-tmp
-__pycache__
+tmp/
+__pycache__/
+work/
+build/
+dist/
+*.egg-info/
