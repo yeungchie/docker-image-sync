@@ -6,10 +6,24 @@
 pip3 install docker_image_sync
 ```
 
-## Try run
+## Example
 
-```bash
-python3 -m docker_image_sync.remote ./config.yaml --try-run
++ config.yaml
+
+```yaml
+images:
+- alpine:latest
+- python:latest
+- gitlab/gitlab-ce:latest
+- homeassistant/home-assistant:latest
+registry: my.registry.com
+namespace: mynamespace
 ```
 
-![Demo](./img/demo.gif 'Demo')
++ try run
+
+```bash
+python3 -m docker_image_sync.remote config.yaml --try-run
+```
+
+![Demo](https://raw.githubusercontent.com/yeungchie/docker-image-sync/main/img/demo.gif 'Demo')

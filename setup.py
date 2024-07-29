@@ -6,7 +6,7 @@ here = Path(__file__).resolve().parent
 with open(here / 'README.md', encoding='utf-8') as f:
     long_description = '\n' + f.read()
 
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 DESCRIPTION = 'Docker Image Synchronizer'
 
 setup(
@@ -18,8 +18,9 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/yeungchie/docker-image-sync',
     packages=find_packages(),
+    python_requires='>=3.6',
     install_requires=[
-        'PyYAML>=6.0.1',
+        'PyYAML>=5.3.1',
         'docker>=5.0.3',
         'rich>=12.6.0',
     ],
