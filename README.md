@@ -12,10 +12,10 @@ pip3 install docker_image_sync
 
 ```yaml
 images:
-- alpine:latest
-- python:latest
-- gitlab/gitlab-ce:latest
-- homeassistant/home-assistant:latest
+  - alpine:latest
+  - python:latest
+  - gitlab/gitlab-ce:latest
+  - homeassistant/home-assistant:latest
 registry: my.registry.com
 namespace: mynamespace
 ```
