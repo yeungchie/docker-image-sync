@@ -38,7 +38,7 @@ def sync(image_spec: str, dest_domain: str, *, demo: bool = False, richLogHandle
     try:
         if richLogHandle:
             richLogHandle(
-                f'Image Pull >>> {image.source_domain}/{image.image_name}:{image.tag}',
+                f'Image Pull >>> {image.source_name}',
                 NewLine(1),
             )
         image.pull()
@@ -55,7 +55,7 @@ def sync(image_spec: str, dest_domain: str, *, demo: bool = False, richLogHandle
     try:
         if richLogHandle:
             richLogHandle(
-                f'Image Tag  >>> {image.source_domain}/{image.image_name}:{image.tag} => {image.dest_domain}/{image.image_name}:{image.tag}',
+                f'Image Tag  >>> {image.source_name} => {image.dest_name}',
                 NewLine(1),
             )
         if not image.makeTag():
@@ -71,7 +71,7 @@ def sync(image_spec: str, dest_domain: str, *, demo: bool = False, richLogHandle
     try:
         if richLogHandle:
             richLogHandle(
-                f'Image Push >>> {image.dest_domain}/{image.image_name}:{image.tag}',
+                f'Image Push >>> {image.dest_name}',
                 NewLine(1),
             )
         res = image.push()
