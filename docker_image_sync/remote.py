@@ -38,47 +38,58 @@ def sync(image_spec: str, dest_domain: str, *, demo: bool = False, richLogHandle
     try:
         if richLogHandle:
             richLogHandle(
-                f'Image Pull >>> {image.source_domain}/{image.image_name}:{image.tag}'
+                f'Image Pull >>> {image.source_domain}/{image.image_name}:{image.tag}',
+                NewLine(1),
             )
         image.pull()
     except ImageNotFound:
         if richLogHandle:
-            richLogHandle(f'Image Not Found.')
+            richLogHandle(f'Image Not Found.', NewLine(1))
         return
     except NotFound:
         if richLogHandle:
-            richLogHandle(f'Invalid Tag <{image.tag}>')
+            richLogHandle(f'Invalid Tag <{image.tag}>', NewLine(1))
         return
 
     # tag update
     try:
         if richLogHandle:
             richLogHandle(
-                f'Image Tag  >>> {image.source_domain}/{image.image_name}:{image.tag} => {image.dest_domain}/{image.image_name}:{image.tag}'
+                f'Image Tag  >>> {image.source_domain}/{image.image_name}:{image.tag} => {image.dest_domain}/{image.image_name}:{image.tag}',
+                NewLine(1),
             )
         if not image.makeTag():
             if richLogHandle:
-                richLogHandle('Image Tag Failed.')
+                richLogHandle('Image Tag Failed.', NewLine(1))
             return
     except:
         if richLogHandle:
-            richLogHandle('Image Tag Failed.')
+            richLogHandle('Image Tag Failed.', NewLine(1))
         return
 
     # push
     try:
         if richLogHandle:
             richLogHandle(
-                f'Image Push >>> {image.dest_domain}/{image.image_name}:{image.tag}'
+                f'Image Push >>> {image.dest_domain}/{image.image_name}:{image.tag}',
+                NewLine(1),
             )
         res = image.push()
         if richLogHandle:
             richLogHandle(
                 Panel(
-                    Syntax(yaml.dump(res), 'yaml', line_numbers=True),
+                    Syntax(
+                        yaml.dump(res),
+                        lexer='yaml',
+                        line_numbers=True,
+                        indent_guides=True,
+                    ),
+                    border_style='blue',
                     title='Push Result',
+                    title_align='right',
                     width=None,
-                )
+                ),
+                NewLine(1),
             )
     except:
         if richLogHandle:
@@ -119,7 +130,7 @@ if __name__ == '__main__':
         images = config['images']
         task_total = progress.add_task("[red]Image Synchronizing", total=len(images))
         for x in images:
-            progress.log(Rule(x.strip()))
+            progress.log(Rule(x.strip()), NewLine(1))
             sync(x, dest_domain, demo=args.try_run, richLogHandle=progress.log)
             progress.log(NewLine(1))
             progress.update(task_total, advance=1)
