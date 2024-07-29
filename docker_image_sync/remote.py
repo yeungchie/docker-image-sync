@@ -124,7 +124,7 @@ if __name__ == '__main__':
         SpinnerColumn(),
         *Progress.get_default_columns(),
         TimeElapsedColumn(),
-        console=Console(log_time_format='[%F %T]', log_path=False),
+        console=Console(log_time_format='[%F %T]'),
         transient=False,
     ) as progress:
         images = config['images']
