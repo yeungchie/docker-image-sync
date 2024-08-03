@@ -4,6 +4,10 @@ from docker.errors import ImageNotFound, NotFound
 
 from .image import Image
 
+__all__ = [
+    'sync',
+]
+
 
 def sync(image_spec: str, dest_domain: str, *, demo: bool = False, richLogHandle=None):
     # tag
