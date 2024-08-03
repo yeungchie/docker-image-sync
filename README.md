@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-pip3 install docker_image_sync
+pip3 install docker-image-sync
 ```
 
 ## Example
