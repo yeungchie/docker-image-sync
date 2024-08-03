@@ -6,6 +6,10 @@ import docker
 from docker.models.images import Image as DockerImage
 from docker.client import DockerClient
 
+__all__ = [
+    'Image',
+]
+
 
 class Image:
     '''从 dockerhub 拉取镜像，并推送到私有仓库。
@@ -20,7 +24,7 @@ class Image:
         self,
         *,
         source: Optional[str],
-        dest: str,
+        dest: Optional[str],
         image: str,
         tag: str = 'latest',
     ) -> None:
@@ -39,7 +43,10 @@ class Image:
 
     @property
     def dest_repo(self) -> str:
-        return f'{self.dest_domain}/{self.image_name}'
+        if self.dest_domain:
+            return f'{self.dest_domain}/{self.image_name}'
+        else:
+            return self.image_name
 
     @property
     def source_name(self) -> str:
