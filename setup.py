@@ -1,13 +1,17 @@
 from pathlib import Path
 from setuptools import setup, find_packages
+import sys
+
+sys.path.insert(0, '.')
+
+from docker_image_sync import __version__
+
+VERSION = __version__
+DESCRIPTION = 'Docker Image Synchronizer'
 
 here = Path(__file__).resolve().parent
-
 with open(here / 'README.md', encoding='utf-8') as f:
     long_description = '\n' + f.read()
-
-VERSION = '0.0.2'
-DESCRIPTION = 'Docker Image Synchronizer'
 
 setup(
     name='docker-image-sync',
