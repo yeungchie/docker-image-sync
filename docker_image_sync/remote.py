@@ -9,7 +9,14 @@ __all__ = [
 ]
 
 
-def sync(image_spec: str, dest_domain: str, *, demo: bool = False, richLogHandle=None):
+def sync(
+    image_spec: str,
+    dest_domain: str,
+    *,
+    demo: bool = False,
+    richLogHandle=None,
+    lite: bool = False,
+):
     # tag
     repo_tag = image_spec.strip().split(':')
     try:
@@ -79,7 +86,7 @@ def sync(image_spec: str, dest_domain: str, *, demo: bool = False, richLogHandle
                 NewLine(1),
             )
         res = image.push()
-        if richLogHandle:
+        if richLogHandle and not lite:
             richLogHandle(
                 Panel(
                     Syntax(
@@ -112,6 +119,7 @@ if __name__ == '__main__':
     parse = argparse.ArgumentParser()
     parse.add_argument('config', help='yaml file')
     parse.add_argument('--try-run', action='store_true', help='try run')
+    parse.add_argument('--lite', action='store_true', help='lite push result')
     args = parse.parse_args()
 
     if not args.config:
@@ -122,7 +130,6 @@ if __name__ == '__main__':
         config = yaml.full_load(f)
 
     dest_domain = f"{config['registry']}/{config['namespace']}"
-    demo_mode = config.get('demo', False)
 
     with Progress(
         SpinnerColumn(),
@@ -135,6 +142,12 @@ if __name__ == '__main__':
         task_total = progress.add_task("[red]Image Synchronizing", total=len(images))
         for x in images:
             progress.log(Rule(x.strip()), NewLine(1))
-            sync(x, dest_domain, demo=args.try_run, richLogHandle=progress.log)
+            sync(
+                x,
+                dest_domain,
+                demo=args.try_run,
+                richLogHandle=progress.log,
+                lite=args.lite,
+            )
             progress.log(NewLine(1))
             progress.update(task_total, advance=1)
