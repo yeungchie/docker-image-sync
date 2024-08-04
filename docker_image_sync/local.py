@@ -1,3 +1,4 @@
+from typing import Optional
 import yaml
 
 from docker.errors import ImageNotFound, NotFound
@@ -11,7 +12,8 @@ __all__ = [
 
 def sync(
     image_spec: str,
-    source_domain: str,
+    source_registry: str,
+    source_namespace: Optional[str] = None,
     *,
     demo: bool = False,
     richLogHandle=None,
@@ -32,6 +34,14 @@ def sync(
     else:
         dest_domain = None
         image_name = repos[0]
+
+    if source_namespace:
+        source_domain = f"{source_registry}/{source_namespace}"
+    elif dest_domain:
+        dest_namespace = dest_domain.split('/')[-1]
+        source_domain = f"{source_registry}/{dest_namespace}"
+    else:
+        source_domain = str(source_registry)
 
     image = Image(
         source=source_domain,
@@ -99,8 +109,8 @@ if __name__ == '__main__':
     with open(args.config, 'r') as f:
         config = yaml.full_load(f)
 
-    source_domain = f"{config['registry']}/{config['namespace']}"
-    demo_mode = config.get('demo', False)
+    registry = config['registry']
+    namespace = config.get('namespace', None)
 
     with Progress(
         SpinnerColumn(),
@@ -113,6 +123,13 @@ if __name__ == '__main__':
         task_total = progress.add_task("[red]Image Synchronizing", total=len(images))
         for x in images:
             progress.log(Rule(x.strip()), NewLine(1))
-            sync(x, source_domain, demo=args.try_run, richLogHandle=progress.log, lite=args.lite)
+            sync(
+                x,
+                source_registry=registry,
+                source_namespace=namespace,
+                demo=args.try_run,
+                richLogHandle=progress.log,
+                lite=args.lite,
+            )
             progress.log(NewLine(1))
             progress.update(task_total, advance=1)

@@ -1,3 +1,4 @@
+from typing import Optional
 import yaml
 
 from docker.errors import ImageNotFound, NotFound
@@ -11,7 +12,8 @@ __all__ = [
 
 def sync(
     image_spec: str,
-    dest_domain: str,
+    dest_registry: str,
+    dest_namespace: Optional[str] = None,
     *,
     demo: bool = False,
     richLogHandle=None,
@@ -32,6 +34,14 @@ def sync(
     else:
         source_domain = None
         image_name = repos[0]
+
+    if dest_namespace:
+        dest_domain = f"{dest_registry}/{dest_namespace}"
+    elif source_domain:
+        source_namespace = source_domain.split('/')[-1]
+        dest_domain = f"{dest_registry}/{source_namespace}"
+    else:
+        dest_domain = str(dest_registry)
 
     image = Image(
         source=source_domain,
@@ -129,7 +139,8 @@ if __name__ == '__main__':
     with open(args.config, 'r') as f:
         config = yaml.full_load(f)
 
-    dest_domain = f"{config['registry']}/{config['namespace']}"
+    registry = config['registry']
+    namespace = config.get('namespace', None)
 
     with Progress(
         SpinnerColumn(),
@@ -144,7 +155,8 @@ if __name__ == '__main__':
             progress.log(Rule(x.strip()), NewLine(1))
             sync(
                 x,
-                dest_domain,
+                dest_registry=registry,
+                dest_namespace=namespace,
                 demo=args.try_run,
                 richLogHandle=progress.log,
                 lite=args.lite,
