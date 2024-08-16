@@ -43,7 +43,7 @@ def purge_by_name(name: str, logHandle=print) -> None:
     try:
         image = CLIENT.images.get(name)
     except ImageNotFound:
-        pass
+        return
 
     containers = getContainers(image)
     if len(containers) > 0:
@@ -61,6 +61,10 @@ def purge_none(logHandle=print, progress=None) -> None:
     if progress is not None:
         task = progress.add_task("[red]Invalid Image Purge", total=len(image_list))
 
+        def task_update():
+            if progress is not None and task is not None:
+                progress.update(task, advance=1)
+
     for image in image_list:
         if not image.tags:
             containers = getContainers(image)
@@ -69,14 +73,12 @@ def purge_none(logHandle=print, progress=None) -> None:
                 logHandle(
                     f'Image "{image.short_id}" is being used for container: {names}'
                 )
-                if progress is not None and task is not None:
-                    progress.update(task, advance=1)
+                task_update()
                 continue
 
             CLIENT.images.remove(image.id, force=True)
             logHandle(f'Image "{image.short_id}" is removed')
-            if progress is not None and task is not None:
-                progress.update(task, advance=1)
+        task_update()
 
 
 if __name__ == '__main__':

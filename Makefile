@@ -1,3 +1,9 @@
+.PHONY:  main clean install uninstall build upload test
+
+main:
+	make clean
+	make build
+
 clean:
 	make uninstall
 	rm -rf docker_image_sync/__pycache__
