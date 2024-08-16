@@ -1,7 +1,6 @@
 .PHONY:  main clean install uninstall build upload test
 
 main:
-	make clean
 	make build
 
 clean:

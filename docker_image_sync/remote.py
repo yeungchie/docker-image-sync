@@ -59,40 +59,40 @@ def sync(
     try:
         if richLogHandle:
             richLogHandle(
-                f'Image Pull >>> {image.source_name}',
+                f'[INFO] Image Pull >>> {image.source_name}',
                 NewLine(1),
             )
         image.pull()
     except ImageNotFound:
         if richLogHandle:
-            richLogHandle(f'Image Not Found.', NewLine(1))
+            richLogHandle(f'[WARN] Image Not Found.', NewLine(1))
         return
     except NotFound:
         if richLogHandle:
-            richLogHandle(f'Invalid Tag <{image.tag}>', NewLine(1))
+            richLogHandle(f'[WARN] Invalid Tag <{image.tag}>', NewLine(1))
         return
 
     # tag update
     try:
         if richLogHandle:
             richLogHandle(
-                f'Image Tag  >>> {image.source_name} => {image.dest_name}',
+                f'[INFO] Image Tag  >>> {image.source_name} => {image.dest_name}',
                 NewLine(1),
             )
         if not image.makeTag():
             if richLogHandle:
-                richLogHandle('Image Tag Failed.', NewLine(1))
+                richLogHandle('[WARN] Image Tag Failed.', NewLine(1))
             return
     except:
         if richLogHandle:
-            richLogHandle('Image Tag Failed.', NewLine(1))
+            richLogHandle('[WARN] Image Tag Failed.', NewLine(1))
         return
 
     # push
     try:
         if richLogHandle:
             richLogHandle(
-                f'Image Push >>> {image.dest_name}',
+                f'[INFO] Image Push >>> {image.dest_name}',
                 NewLine(1),
             )
         res = image.push()
@@ -114,7 +114,7 @@ def sync(
             )
     except:
         if richLogHandle:
-            richLogHandle('Image Push Failed.')
+            richLogHandle('[WARN] Image Push Failed.')
 
 
 if __name__ == '__main__':
