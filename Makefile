@@ -20,5 +20,5 @@ upload: dist
 
 test:
 	make clean
-	python -m docker_image_sync.remote ./config.yaml --try-run --lite
-	python -m docker_image_sync.local  ./config.yaml --try-run --lite
+	python -m docker_image_sync.remote ./config.yaml --try-run
+	python -m docker_image_sync.local  ./config.yaml --try-run

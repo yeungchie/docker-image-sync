@@ -17,7 +17,7 @@ def sync(
     *,
     demo: bool = False,
     richLogHandle=None,
-    lite: bool = False,
+    verbose: bool = False,
 ):
     # tag
     repo_tag = image_spec.strip().split(':')
@@ -96,7 +96,7 @@ def sync(
                 NewLine(1),
             )
         res = image.push()
-        if richLogHandle and not lite:
+        if richLogHandle and verbose:
             richLogHandle(
                 Panel(
                     Syntax(
@@ -129,7 +129,7 @@ if __name__ == '__main__':
     parse = argparse.ArgumentParser()
     parse.add_argument('config', help='yaml file')
     parse.add_argument('--try-run', action='store_true', help='try run')
-    parse.add_argument('--lite', action='store_true', help='lite push result')
+    parse.add_argument('--verbose', action='store_true', help='verbose push result')
     args = parse.parse_args()
 
     if not args.config:
@@ -154,12 +154,12 @@ if __name__ == '__main__':
         for x in images:
             progress.log(Rule(x.strip()), NewLine(1))
             sync(
-                x,
+                image_spec=x,
                 dest_registry=registry,
                 dest_namespace=namespace,
                 demo=args.try_run,
                 richLogHandle=progress.log,
-                lite=args.lite,
+                verbose=args.verbose,
             )
             progress.log(NewLine(1))
             progress.update(task_total, advance=1)
