@@ -14,4 +14,4 @@
     `my.registry.com/mynamespace/imagename:latest`
 '''
 
-__version__ = '0.0.4'
+__version__ = '0.0.5'
