@@ -48,11 +48,11 @@ def purge_by_name(name: str, logHandle=print) -> None:
     containers = getContainers(image)
     if len(containers) > 0 and len(image.tags) == 1:
         container_names = '[+' + ', '.join(str(c.name) for c in containers) + ']'
-        logHandle(f'[WARN] Image "{name[0]}" is being used for container: {container_names}')
+        logHandle(f'[WARN] Image "{image.tags[0]}" is being used for container: {container_names}')
         return
 
     CLIENT.images.remove(name)
-    logHandle(f'[INFO] Image "{image.tags}" is removed')
+    logHandle(f'[INFO] Image "{name}" is removed')
 
 
 def purge_none(logHandle=print, progress=None) -> None:
