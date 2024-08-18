@@ -33,9 +33,12 @@ def getContainers(image_id: Union[str, Image]) -> List[Container]:
     containers = []
     if image is not None:
         id = image.id
-        for c in CLIENT.containers.list():
-            if id == c.image.id:
-                containers.append(c)
+        for c in CLIENT.containers.list(all=True):
+            try:
+                if id == c.image.id:
+                    containers.append(c)
+            except ImageNotFound:
+                continue
     return containers
 
 
