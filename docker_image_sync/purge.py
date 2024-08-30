@@ -79,8 +79,16 @@ def purge_none(logHandle=print, progress=None) -> None:
                 task_update()
                 continue
 
-            CLIENT.images.remove(image.id, force=True)
-            logHandle(f'[INFO] Image "{image.short_id}" is removed')
+            try:
+                CLIENT.images.remove(image.id, force=True)
+                logHandle(f'[INFO] Image "{image.short_id}" is removed')
+            except IOError as e:
+                logHandle(f'[MSG] Image "{image.short_id}" failed to removed, try again ...')
+                try:
+                    CLIENT.images.remove(image.id, force=True)
+                    logHandle(f'[INFO] Image "{image.short_id}" is removed')
+                except:
+                    logHandle(f'[MSG] Image "{image.short_id}" failed to removed, skip ...')
         task_update()
 
 
